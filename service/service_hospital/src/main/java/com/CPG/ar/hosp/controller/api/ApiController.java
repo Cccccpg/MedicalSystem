@@ -127,7 +127,7 @@ public class ApiController {
         ScheduleQueryVo scheduleQueryVo = new ScheduleQueryVo();
         scheduleQueryVo.setHoscode((String)translateUtile(request).get("hoscode"));
         scheduleQueryVo.setDepcode((String)translateUtile(request).get("depcode"));
-        //调用service方法
+        //调用service方法，实现查询排班
         Page<Schedule> pageModel = scheduleService.findPageSchedule(page,limit,scheduleQueryVo);
         return Result.ok(pageModel);
     }
