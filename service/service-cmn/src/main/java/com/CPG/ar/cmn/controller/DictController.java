@@ -5,6 +5,7 @@ import com.CPG.ar.common.result.Result;
 import com.CPG.ar.entity.cmn.Dict;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -52,5 +53,29 @@ public class DictController {
     public Result importDict(MultipartFile file){
         dictService.importDictData(file);
         return Result.ok();
+    }
+
+    /**
+     * 根据dictCode和value值查询
+     * @param dictCode
+     * @param value
+     * @return
+     */
+    @GetMapping("getName/{dictCode}/{value}")
+    public Result getName(@PathVariable String dictCode,
+                          @PathVariable String value){
+        String dictName = dictService.getDictName(dictCode,value);
+        return Result.ok(dictName);
+    }
+
+    /**
+     * 根据value查询
+     * @param value
+     * @return
+     */
+    @GetMapping("getName/{value}")
+    public Result getName(@PathVariable String value){
+        String dictName = dictService.getDictName("",value);
+        return Result.ok(dictName);
     }
 }
