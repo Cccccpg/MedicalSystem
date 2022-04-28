@@ -13,7 +13,7 @@
     <modules>
         <module>service_hospital</module>
         <module>service_user</module>
-        <module>service-cmn</module>
+        <module>service_cmn</module>
     </modules>
     <artifactId>service</artifactId>
     <dependencies>
@@ -47,11 +47,11 @@
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
         </dependency>
-<!--        &lt;!&ndash; 服务调用feign &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.cloud</groupId>-->
-<!--            <artifactId>spring-cloud-starter-openfeign</artifactId>-->
-<!--        </dependency>-->
+        <!-- 服务调用feign -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
         <!-- 服务注册 -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>

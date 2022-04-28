@@ -5,7 +5,6 @@ import com.CPG.ar.common.result.Result;
 import com.CPG.ar.entity.cmn.Dict;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,6 +31,13 @@ public class DictController {
     public Result findChildData(@PathVariable Long id){
         List<Dict> dictList = dictService.findChildData(id);
         return Result.ok(dictList);
+    }
+
+    @ApiOperation(value = "根据dictCode获取下级节点")
+    @GetMapping("findByDictCode/{dictCode}")
+    public Result findByDictCode(@PathVariable String dictCode){
+        List<Dict> list = dictService.findByDictCode(dictCode);
+        return Result.ok(list);
     }
 
     /**
@@ -62,10 +68,10 @@ public class DictController {
      * @return
      */
     @GetMapping("getName/{dictCode}/{value}")
-    public Result getName(@PathVariable String dictCode,
+    public String getName(@PathVariable String dictCode,
                           @PathVariable String value){
         String dictName = dictService.getDictName(dictCode,value);
-        return Result.ok(dictName);
+        return dictName;
     }
 
     /**
@@ -74,8 +80,9 @@ public class DictController {
      * @return
      */
     @GetMapping("getName/{value}")
-    public Result getName(@PathVariable String value){
+    public String getName(@PathVariable String value){
         String dictName = dictService.getDictName("",value);
-        return Result.ok(dictName);
+        return dictName;
     }
+
 }

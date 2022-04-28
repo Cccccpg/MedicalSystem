@@ -15,4 +15,13 @@ public interface HospitalService {
 
     //医院列表（条件查询带分页）
     Page<Hospital> selectHospPage(Integer page, Integer limit, HospitalQueryVo hospitalQueryVo);
+
+    //更新医院上线状态
+    void updateHospitalStatus(String id, Integer status);
+
+    //获取医院详细信息
+    Map<String, Object> getHospitalById(String id);
+
+    //根据hoscode获取医院名称
+    String getHospName(String hoscode);
 }

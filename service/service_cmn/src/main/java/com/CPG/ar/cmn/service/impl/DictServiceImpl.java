@@ -104,7 +104,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
             Dict dict = baseMapper.selectOne(dictQueryWrapperWrapper);
             return dict.getName();
         }else {
-            Dict dict_code = getDictByDictCode(dictCode);
+            Dict dict_code = this.getDictByDictCode(dictCode);
             Long parent_id = dict_code.getId();
             //根据parent_id和value进行查询
             Dict finalDict = baseMapper.selectOne(new QueryWrapper<Dict>()
@@ -112,6 +112,20 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
                     .eq("value",value));
             return finalDict.getName();
         }
+    }
+
+    /**
+     * 根据dictCode查询下级节点
+     * @param dictCode
+     * @return
+     */
+    @Override
+    public List<Dict> findByDictCode(String dictCode) {
+        //根据dictCode获取对应的id
+        Dict dictByDictCode = this.getDictByDictCode(dictCode);
+        //根据id获取子节点
+        List<Dict> childData = this.findChildData(dictByDictCode.getId());
+        return childData;
     }
 
     //判断id下面是否有子节点

@@ -3,41 +3,42 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>service</artifactId>
+        <artifactId>appointmentregister_parent</artifactId>
         <groupId>com.CPG</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <packaging>jar</packaging>
 
-    <artifactId>service_hospital</artifactId>
-    <name>service_hosp</name>
+    <artifactId>service_client</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>service_cmn_client</module>
+    </modules>
 
     <dependencies>
         <dependency>
             <groupId>com.CPG</groupId>
-            <artifactId>model</artifactId>
+            <artifactId>common_util</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
         <dependency>
             <groupId>com.CPG</groupId>
-            <artifactId>service_cmn_client</artifactId>
+            <artifactId>model</artifactId>
             <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <scope>provided </scope>
+        </dependency>
+
+        <!-- 服务调用feign -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <scope>provided </scope>
         </dependency>
     </dependencies>
 
-    <build>
-        <finalName>service-hosp</finalName>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
+
 </project>
