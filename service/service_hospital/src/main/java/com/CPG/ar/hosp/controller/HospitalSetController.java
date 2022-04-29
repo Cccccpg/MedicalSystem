@@ -19,7 +19,6 @@ import java.util.Random;
 
 @Api(tags = "医院设置管理")
 @RestController
-@CrossOrigin
 @RequestMapping("/admin/hosp/hospitalSet")
 public class HospitalSetController {
 
