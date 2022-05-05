@@ -4,6 +4,7 @@ import com.CPG.ar.entity.hosp.Hospital;
 import com.CPG.ar.vo.hosp.HospitalQueryVo;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
 import java.util.Map;
 
 public interface HospitalService {
@@ -24,4 +25,7 @@ public interface HospitalService {
 
     //根据hoscode获取医院名称
     String getHospName(String hoscode);
+
+    //根据医院名称查询
+    List<Hospital> findByHosName(String hosname);
 }
