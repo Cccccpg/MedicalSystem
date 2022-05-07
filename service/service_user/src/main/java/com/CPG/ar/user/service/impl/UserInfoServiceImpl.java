@@ -37,7 +37,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
         //3 判断手机收到的验证码与输入的验证码是否正确
         String redisCode = redisTemplate.opsForValue().get(phone);
-        if(code.equals(redisCode)){
+        if(!code.equals(redisCode)){
             throw new AppointmentRegisterException(ResultCodeEnum.CODE_ERROR);
         }
 

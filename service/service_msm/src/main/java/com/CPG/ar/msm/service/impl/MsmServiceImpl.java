@@ -15,7 +15,7 @@ public class MsmServiceImpl implements MsmService {
         if (StringUtils.isEmpty(phone)){
             return false;
         }
-        //整合阿里云短信服务，设置相关参数
+        //用阿里云短信服务，设置相关参数
         MsmUtils.sendMessage(phone,code);
         return true;
     }
