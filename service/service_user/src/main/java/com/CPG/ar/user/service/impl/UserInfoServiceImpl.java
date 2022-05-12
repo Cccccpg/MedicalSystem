@@ -41,18 +41,33 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
             throw new AppointmentRegisterException(ResultCodeEnum.CODE_ERROR);
         }
 
-        //4 判断是否为第一次登录：根据手机号查询数据库，如果不存在数据，那么就是第一次登录
-        QueryWrapper<UserInfo> wrapper = new QueryWrapper<>();
-        wrapper.eq("phone",phone);
-        UserInfo userInfo = baseMapper.selectOne(wrapper);
-        if (null == userInfo){  //第一次登录
-            //添加信息到数据库中
-            userInfo = new UserInfo();
-            userInfo.setName("");
-            userInfo.setPhone(phone);
-            userInfo.setStatus(1);
+        //绑定手机号码
+        UserInfo userInfo = null;
+        if(!StringUtils.isEmpty(loginVo.getOpenid())) {
+            userInfo = this.selectWxInfoOpenId(loginVo.getOpenid());
+            if(null != userInfo) {
+                userInfo.setPhone(loginVo.getPhone());
+                this.updateById(userInfo);
+            } else {
+                throw new AppointmentRegisterException(ResultCodeEnum.DATA_ERROR);
+            }
+        }
 
-            baseMapper.insert(userInfo);
+        //如果userInfo为空，进行正常手机登录
+        if (userInfo == null){
+            //4 判断是否为第一次登录：根据手机号查询数据库，如果不存在数据，那么就是第一次登录
+            QueryWrapper<UserInfo> wrapper = new QueryWrapper<>();
+            wrapper.eq("phone",phone);
+            userInfo = baseMapper.selectOne(wrapper);
+            if (null == userInfo){  //第一次登录
+                //添加信息到数据库中
+                userInfo = new UserInfo();
+                userInfo.setName("");
+                userInfo.setPhone(phone);
+                userInfo.setStatus(1);
+
+                baseMapper.insert(userInfo);
+            }
         }
 
         //校验用户是否被禁用
@@ -78,5 +93,14 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         String token = JwtHelper.createToken(userInfo.getId(), name);
         map.put("token",token);
         return map;
+    }
+
+    //根据openid查询
+    @Override
+    public UserInfo selectWxInfoOpenId(String openid) {
+        QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("openid",openid);
+        UserInfo userInfo = baseMapper.selectOne(queryWrapper);
+        return userInfo;
     }
 }
