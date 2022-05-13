@@ -4,9 +4,11 @@ import com.CPG.ar.common.exception.AppointmentRegisterException;
 import com.CPG.ar.common.helper.JwtHelper;
 import com.CPG.ar.common.result.ResultCodeEnum;
 import com.CPG.ar.entity.user.UserInfo;
+import com.CPG.ar.enums.AuthStatusEnum;
 import com.CPG.ar.user.mapper.UserInfoMapper;
 import com.CPG.ar.user.service.UserInfoService;
 import com.CPG.ar.vo.user.LoginVo;
+import com.CPG.ar.vo.user.UserAuthVo;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,5 +104,24 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         queryWrapper.eq("openid",openid);
         UserInfo userInfo = baseMapper.selectOne(queryWrapper);
         return userInfo;
+    }
+
+    //用户认证
+    @Override
+    public void userAuth(Long userId, UserAuthVo userAuthVo) {
+        //根据用户id查询用户信息
+        UserInfo userInfo = baseMapper.selectById(userId);
+        //设置认证信息
+        //认证人的姓名
+        userInfo.setName(userAuthVo.getName());
+        //其他信息
+        userInfo.setCertificatesType(userAuthVo.getCertificatesType());
+        userInfo.setCertificatesNo(userAuthVo.getCertificatesNo());
+        userInfo.setCertificatesUrl(userAuthVo.getCertificatesUrl());
+        userInfo.setAuthStatus(AuthStatusEnum.AUTH_RUN.getStatus());
+
+        //进行信息更新
+        baseMapper.updateById(userInfo);
+
     }
 }
