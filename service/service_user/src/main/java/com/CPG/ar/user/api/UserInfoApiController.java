@@ -1,15 +1,13 @@
-package com.CPG.ar.user.controller;
+package com.CPG.ar.user.api;
 
 import com.CPG.ar.common.result.Result;
 import com.CPG.ar.common.utils.AuthContextHolder;
+import com.CPG.ar.entity.user.UserInfo;
 import com.CPG.ar.user.service.UserInfoService;
 import com.CPG.ar.vo.user.LoginVo;
 import com.CPG.ar.vo.user.UserAuthVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -43,5 +41,17 @@ public class UserInfoApiController {
         //在方法中传递两个参数，id 和 认证数据的vo对象
         userInfoService.userAuth(AuthContextHolder.getUserId(request),userAuthVo);
         return Result.ok();
+    }
+
+    /**
+     * 获取用户id信息接口
+     * @param request
+     * @return
+     */
+    @GetMapping("auth/getUserInfo")
+    public Result getUserInfo(HttpServletRequest request){
+        Long userId = AuthContextHolder.getUserId(request);
+        UserInfo userInfo = userInfoService.getById(userId);
+        return Result.ok(userInfo);
     }
 }

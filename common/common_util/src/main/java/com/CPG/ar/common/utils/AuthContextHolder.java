@@ -20,7 +20,7 @@ public class AuthContextHolder {
     public static String getUserName(HttpServletRequest request){
         //先从header中获取token
         String token = request.getHeader("token");
-        //jwt从token中获取userid
+        //jwt从token中获取username
         String userName = JwtHelper.getUserName(token);
         return userName;
     }
