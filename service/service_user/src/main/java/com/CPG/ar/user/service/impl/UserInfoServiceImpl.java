@@ -198,7 +198,12 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     //认证审批
     @Override
     public void approval(Long userId, Integer authStatus) {
-
+        //2代表审核通过 -1代表审核不通过
+        if(authStatus == 2 || authStatus == -1){
+            UserInfo userInfo = baseMapper.selectById(userId);
+            userInfo.setAuthStatus(authStatus);
+            baseMapper.updateById(userInfo);
+        }
     }
 
     private UserInfo packageUserInfo(UserInfo userInfo) {

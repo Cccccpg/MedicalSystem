@@ -4,8 +4,12 @@ import com.CPG.ar.common.result.Result;
 import com.CPG.ar.entity.hosp.Hospital;
 import com.CPG.ar.hosp.service.DepartmentService;
 import com.CPG.ar.hosp.service.HospitalService;
+import com.CPG.ar.hosp.service.HospitalSetService;
+import com.CPG.ar.hosp.service.ScheduleService;
 import com.CPG.ar.vo.hosp.DepartmentVo;
 import com.CPG.ar.vo.hosp.HospitalQueryVo;
+import com.CPG.ar.vo.hosp.ScheduleOrderVo;
+import com.CPG.ar.vo.order.SignInfoVo;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,6 +30,12 @@ public class HospApiController {
 
     @Autowired
     private DepartmentService departmentService;
+
+    @Autowired
+    private ScheduleService scheduleService;
+
+    @Autowired
+    private HospitalSetService hospitalSetService;
 
     /**
      * 查询医院列表
@@ -79,5 +89,65 @@ public class HospApiController {
     public Result findHospDetail(@PathVariable String hoscode){
         Map<String, Object> map = hospitalService.findHospDetail(hoscode);
         return Result.ok(map);
+    }
+
+    /**
+     * 获取可预约的排班数据（带分页）
+     * @param page
+     * @param limit
+     * @param hoscode
+     * @param depcode
+     * @return
+     */
+    @ApiOperation(value = "获取可预约的排班数据")
+    @GetMapping("auth/getBookingScheduleRule/{page}/{limit}/{hoscode}/{depcode}")
+    public Result getBookingSchedule(@PathVariable Integer page,
+                                     @PathVariable Integer limit,
+                                     @PathVariable String hoscode,
+                                     @PathVariable String depcode){
+        return Result.ok(scheduleService.getBookingSchedule(page,limit,hoscode,depcode));
+    }
+
+    /**
+     * 获取排版数据包括日期
+     * @param hoscode
+     * @param depcode
+     * @param workDate
+     * @return
+     */
+    @ApiOperation(value = "获取排班数据")
+    @GetMapping("auth/findScheduleList/{hoscode}/{depcode}/{workDate}")
+    public Result findScheduleList(@PathVariable String hoscode,
+                                   @PathVariable String depcode,
+                                   @PathVariable String workDate){
+        return Result.ok(scheduleService.getDetailSchedule(hoscode,depcode,workDate));
+    }
+
+    /**
+     * 根据排班id获取排班的数据
+     * @param scheduleId
+     * @return
+     */
+    @ApiOperation(value = "根据排班id获取排班数据")
+    @GetMapping("getSchedule/{scheduleId}")
+    public Result getSchedule(@PathVariable String scheduleId){
+        return Result.ok(scheduleService.getByScheduleId(scheduleId));
+    }
+
+    /**
+     *根据排班id获取预约下单数据
+     * @param scheduleId
+     * @return
+     */
+    @ApiOperation(value = "根据排班id获取预约下单数据")
+    @GetMapping("inner/getScheduleOrderVo/{scheduleId}")
+    public ScheduleOrderVo getScheduleOrderVo(@PathVariable String scheduleId){
+        return scheduleService.getScheduleOrderVo(scheduleId);
+    }
+
+    @ApiOperation(value = "获取医院签名信息")
+    @GetMapping("inner/getSignInfoVo/{hoscode}")
+    public SignInfoVo getSignInfoVo(@PathVariable String hoscode){
+        return hospitalSetService.getSignInfoVo(hoscode);
     }
 }
