@@ -68,6 +68,22 @@ public class UserController {
     }
 
     /**
+     * 审批列表（条件查询带分页）
+     * @param page
+     * @param limit
+     * @param userInfoQueryVo
+     * @return
+     */
+    @ApiOperation(value = "审批列表接口")
+    @GetMapping("authList/{page}/{limit}")
+    public Result authList(@PathVariable Long page,
+                           @PathVariable Long limit,
+                           UserInfoQueryVo userInfoQueryVo){
+        Page<UserInfo> pageParam = new Page<>(page,limit);
+        IPage<UserInfo> pageModel = userInfoService.selectAuthPage(pageParam,userInfoQueryVo);
+        return Result.ok(pageModel);
+    }
+    /**
      * 认证审批
      * @param userId
      * @param authStatus

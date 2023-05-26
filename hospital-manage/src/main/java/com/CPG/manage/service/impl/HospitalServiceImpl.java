@@ -34,13 +34,17 @@ public class HospitalServiceImpl implements HospitalService {
     @Autowired
     private OrderInfoMapper orderInfoMapper;
 
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public Map<String, Object> submitOrder(Map<String, Object> paramMap) {
+        //日志打印获取order服务传过来的订单参数列表
         log.info(JSONObject.toJSONString(paramMap));
+        //获取订单中的参数
         String hoscode = (String)paramMap.get("hoscode");
         String depcode = (String)paramMap.get("depcode");
         String hosScheduleId = (String)paramMap.get("hosScheduleId");
+        //String ScheduleId = (String)paramMap.get("ScheduleId");
         String reserveDate = (String)paramMap.get("reserveDate");
         String reserveTime = (String)paramMap.get("reserveTime");
         String amount = (String)paramMap.get("amount");
@@ -71,7 +75,7 @@ public class HospitalServiceImpl implements HospitalService {
             //记录预约记录
             OrderInfo orderInfo = new OrderInfo();
             orderInfo.setPatientId(patientId);
-            orderInfo.setScheduleId(Long.parseLong(hosScheduleId));
+            orderInfo.setScheduleId(hosScheduleId);
             int number = schedule.getReservedNumber().intValue() - schedule.getAvailableNumber().intValue();
             orderInfo.setNumber(number);
             orderInfo.setAmount(new BigDecimal(amount));
@@ -117,16 +121,33 @@ public class HospitalServiceImpl implements HospitalService {
         orderInfoMapper.updateById(orderInfo);
     }
 
+    //更新取消预约状态
     @Override
     public void updateCancelStatus(Map<String, Object> paramMap) {
         String hoscode = (String)paramMap.get("hoscode");
         String hosRecordId = (String)paramMap.get("hosRecordId");
+        String hosScheduleId = (String)paramMap.get("hosScheduleId");
 
         OrderInfo orderInfo = orderInfoMapper.selectById(hosRecordId);
         if(null == orderInfo) {
             throw new AppointmentRegisterException(ResultCodeEnum.DATA_ERROR);
         }
         //已取消
+        //更新剩余预约数
+        Schedule schedule = this.getSchedule(hosScheduleId);
+        if(null == schedule) {
+            throw new AppointmentRegisterException(ResultCodeEnum.DATA_ERROR);
+        }
+        int reservedNumber = schedule.getReservedNumber();
+        int availableNumber = schedule.getAvailableNumber();
+        if (availableNumber < reservedNumber){
+            availableNumber++;
+        }else{
+            throw new AppointmentRegisterException(ResultCodeEnum.DATA_ERROR);
+        }
+        schedule.setAvailableNumber(availableNumber);
+        hospitalMapper.updateById(schedule);
+        //设置订单状态
         orderInfo.setOrderStatus(-1);
         orderInfo.setQuitTime(new Date());
         orderInfoMapper.updateById(orderInfo);
@@ -144,6 +165,5 @@ public class HospitalServiceImpl implements HospitalService {
         // 业务：略
         return 1L;
     }
-
 
 }

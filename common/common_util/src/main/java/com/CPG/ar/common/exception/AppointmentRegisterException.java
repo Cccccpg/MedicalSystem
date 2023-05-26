@@ -32,7 +32,7 @@ public class AppointmentRegisterException extends RuntimeException {
 
     @Override
     public String toString() {
-        return "GuliException{" +
+        return "AppointmentRegisterException{" +
                 "code=" + code +
                 ", message=" + this.getMessage() +
                 '}';

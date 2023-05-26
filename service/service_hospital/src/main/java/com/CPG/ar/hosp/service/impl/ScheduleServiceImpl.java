@@ -56,7 +56,8 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper,Schedule> im
         Schedule schedule = JSONObject.parseObject(paramMapString, Schedule.class);
 
         //根据医院编号和排班编号查询
-        Schedule scheduleExist = scheduleRepository.getScheduleByHoscodeAndHosScheduleId(schedule.getHoscode(),schedule.getHosScheduleId());
+        Schedule scheduleExist = scheduleRepository
+                .getScheduleByHoscodeAndHosScheduleId(schedule.getHoscode(),schedule.getHosScheduleId());
         //判断
         if (scheduleExist != null){
             scheduleExist.setUpdateTime(new Date());
@@ -67,11 +68,12 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper,Schedule> im
             schedule.setCreateTime(new Date());
             schedule.setUpdateTime(new Date());
             schedule.setIsDeleted(0);
+            schedule.setStatus(1);
             scheduleRepository.save(schedule);
         }
     }
 
-    //条件查询带分页
+    //查询排班接口，条件查询带分页
     @Override
     public Page<Schedule> findPageSchedule(int page, int limit, ScheduleQueryVo scheduleQueryVo) {
         //创建Pageable对象，设置当前页和每页记录数
@@ -91,7 +93,7 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper,Schedule> im
         return all;
     }
 
-    //删除排班
+    //删除排班接口
     @Override
     public void remove(String hoscode, String hosScheduleId) {
         //根据医院编号和排班编号查询
@@ -101,7 +103,7 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper,Schedule> im
         }
     }
 
-    //查询排班规则数据
+    //根据医院编号和科室编号，查询排班规则数据
     @Override
     public Map<String, Object> getRuleSchedule(long page, long limit, String hoscode, String depcode) {
         //根据医院编号和科室编号做查询
@@ -118,7 +120,9 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper,Schedule> im
                 //排序
                 Aggregation.sort(Sort.Direction.DESC,"workDate"),
                 //实现分页
+                //当前页的显示数量
                 Aggregation.skip((page-1)*limit),
+                //设置一页的最大显示数量
                 Aggregation.limit(limit)
         );
         //调用方法执行
@@ -173,6 +177,7 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper,Schedule> im
     //获取可预约的排班数据
     @Override
     public Map<String, Object> getBookingSchedule(Integer page, Integer limit, String hoscode, String depcode) {
+
         Map<String, Object> result = new HashMap<>();
         //获取预约规则
         //根据医院编号获取预约规则
@@ -287,7 +292,7 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper,Schedule> im
     public ScheduleOrderVo getScheduleOrderVo(String scheduleId) {
         ScheduleOrderVo scheduleOrderVo = new ScheduleOrderVo();
         //获取排班信息
-        Schedule schedule = baseMapper.selectById(scheduleId);
+        Schedule schedule = this.getByScheduleId(scheduleId);
         if(schedule == null){
             throw new AppointmentRegisterException(ResultCodeEnum.PARAM_ERROR);
         }

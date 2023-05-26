@@ -11,6 +11,7 @@ import com.CPG.ar.vo.hosp.HospitalQueryVo;
 import com.CPG.ar.vo.hosp.ScheduleOrderVo;
 import com.CPG.ar.vo.order.SignInfoVo;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -147,7 +148,9 @@ public class HospApiController {
 
     @ApiOperation(value = "获取医院签名信息")
     @GetMapping("inner/getSignInfoVo/{hoscode}")
-    public SignInfoVo getSignInfoVo(@PathVariable String hoscode){
+    public SignInfoVo getSignInfoVo(
+            @ApiParam(name = "hoscode", value = "医院code", required = true)
+            @PathVariable("hoscode") String hoscode) {
         return hospitalSetService.getSignInfoVo(hoscode);
     }
 }

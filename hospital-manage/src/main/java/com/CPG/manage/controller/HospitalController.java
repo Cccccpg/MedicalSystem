@@ -40,10 +40,10 @@ public class HospitalController {
 	public Result AgreeAccountLendProject(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			Map<String, Object> paramMap = HttpRequestHelper.switchMap(request.getParameterMap());
-			if(!HttpRequestHelper.isSignEquals(paramMap, apiService.getSignKey())) {
+			//if(!HttpRequestHelper.isSignEquals(paramMap, apiService.getSignKey()))
+			if (!paramMap.get("sign").equals(apiService.getSignKey())){
 				throw new AppointmentRegisterException(ResultCodeEnum.SIGN_ERROR);
 			}
-
 			Map<String, Object> resultMap = hospitalService.submitOrder(paramMap);
 			return Result.ok(resultMap);
 		} catch (AppointmentRegisterException e) {
@@ -80,10 +80,10 @@ public class HospitalController {
 	public Result updateCancelStatus(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			Map<String, Object> paramMap = HttpRequestHelper.switchMap(request.getParameterMap());
-			if(!HttpRequestHelper.isSignEquals(paramMap, apiService.getSignKey())) {
+			//if(!HttpRequestHelper.isSignEquals(paramMap, apiService.getSignKey())) {
+			if (!paramMap.get("sign").equals(apiService.getSignKey())){
 				throw new AppointmentRegisterException(ResultCodeEnum.SIGN_ERROR);
 			}
-
 			hospitalService.updateCancelStatus(paramMap);
 			return Result.ok();
 		} catch (AppointmentRegisterException e) {

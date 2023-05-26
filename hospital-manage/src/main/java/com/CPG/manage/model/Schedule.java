@@ -7,9 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
- * <p>
  * Schedule
- * </p>
  *
  * @author qy
  */

@@ -31,6 +31,7 @@ public enum ResultCodeEnum {
     //LOGIN_ERROR( 23005, "登录失败"),
 
     PAY_RUN(220, "支付中"),
+    REPEAT_SUBMIT_ORDER(221, "请不要重复提交预约"),
     CANCEL_ORDER_FAIL(225, "取消订单失败"),
     CANCEL_ORDER_NO(225, "不能取消预约"),
 

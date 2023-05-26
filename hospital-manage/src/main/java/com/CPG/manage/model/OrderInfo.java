@@ -2,6 +2,7 @@ package com.CPG.manage.model;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -22,10 +23,10 @@ import java.util.Date;
 public class OrderInfo extends BaseEntity {
 	
 	private static final long serialVersionUID = 1L;
-	
+
 	@ApiModelProperty(value = "排班id")
 	@TableField("schedule_id")
-	private Long scheduleId;
+	private String scheduleId;
 
 	@ApiModelProperty(value = "就诊人id")
 	@TableField("patient_id")
@@ -58,6 +59,5 @@ public class OrderInfo extends BaseEntity {
 	@ApiModelProperty(value = "订单状态")
 	@TableField("order_status")
 	private Integer orderStatus;
-
 }
 

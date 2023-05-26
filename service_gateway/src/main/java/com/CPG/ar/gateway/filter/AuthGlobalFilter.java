@@ -75,7 +75,7 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
     }
 
     /**
-     * 获取当前登录用户id
+     * 从请求头携带的Token中获取当前登录用户id
      * @param request
      * @return
      */
