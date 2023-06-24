@@ -276,7 +276,8 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
                 userInfo = new UserInfo();
                 userInfo.setNickName(nickname);
                 userInfo.setOpenid(openid);
-                userInfo.setStatus(1);
+                //设置状态为0：未审核
+                userInfo.setStatus(0);
 
                 save(userInfo);
             }
