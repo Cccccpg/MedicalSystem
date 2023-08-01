@@ -14,11 +14,11 @@ spring:
     #配置模板路径，默认是templates，可以不用配置
     prefix: classpath:/templates/
   redis:
-    host: 192.168.134.134
+    host: 43.136.245.213
     port: 6379
     database: 0
     timeout: 1800000
-    password:
+    password: 199908Cpg
     lettuce:
       pool:
         max-active: 20 #最大连接数
@@ -28,7 +28,7 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/ar_manage?useSSL=false
+    url: jdbc:mysql://43.136.245.213:3306/ar_manage?useSSL=false
     username: root
     password: 123456
     hikari:
